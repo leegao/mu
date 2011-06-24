@@ -36,6 +36,14 @@ public:
 	}
 };
 
+class NMatch : public NExpression{
+public:
+	NExpression& expr;
+	ExpressionList patterns;
+	NMatch(NExpression& expr, ExpressionList patterns) :
+		expr(expr), patterns(patterns){}
+};
+
 class MatchPattern : public NExpression{
 public:
 	NExpression& block;

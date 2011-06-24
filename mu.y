@@ -41,9 +41,9 @@
    calling an (NIdentifier*). It makes the compiler happy.
  */
 %type <ident> ident
-%type <expr> numeric string expr list_decl inline_cond m_pattern list_pdecl match_pattern
+%type <expr> numeric string expr list_decl inline_cond m_pattern list_pdecl match
 %type <varvec> func_decl_args 
-%type <exprvec> call_args list_el list_pel
+%type <exprvec> call_args list_el list_pel match_pattern
 %type <block> program stmts block
 %type <stmt> stmt var_decl func_decl while_syn for_syn if_syn elseif_syn elseend_syn
 %type <counter> for_syn_decl
@@ -130,6 +130,7 @@ expr : ident TEQUAL expr { $$ = new NAssignment(*$<ident>1, *$3); }
      | string
      | list_decl
      | inline_cond
+     | match
      | TTRUE { $$ = new NBoolean(true); }
      | TFALSE { $$ = new NBoolean(false); }
      | TNIL { $$ = new NNil(); }
@@ -139,9 +140,45 @@ expr : ident TEQUAL expr { $$ = new NAssignment(*$<ident>1, *$3); }
      | TLPAREN expr TRPAREN { $$ = $2; }
      ;
 
-match_pattern : m_pattern block { $$ = new MatchPattern($1, *$2); }
-              | m_pattern { $$ = new MatchPattern($1, *(new NNil())); }
-              
+match : TMATCH expr TWITH match_pattern { $$ = new NMatch(*$2, *$4); };
+
+match_pattern : m_pattern block { 
+                	$$ = new ExpressionList(); 
+                	$$->push_back(new MatchPattern($1, *$2)); 
+              }
+              | m_pattern {
+                	$$ = new ExpressionList(); 
+                	$$->push_back(new MatchPattern($1, *(new NNil()))); 
+              }
+              | match_pattern TBITOR m_pattern block {
+                	// back track to make sure that back isn't NNil
+                	MatchPattern* last = dynamic_cast<MatchPattern*>($1->back());
+                	$$ = $1;
+                	if (dynamic_cast<NNil*>(&(last->block))){
+                		// push this pattern into last and set block
+                		$$ = $1;
+                		last->patterns.push_back($3);
+                		last->block = *$4;
+                		
+                	}else{
+                		// create a new match pattern
+                		$$->push_back(new MatchPattern($3, *$4));
+                	}
+              }
+              | match_pattern TBITOR m_pattern {
+                	// back track to make sure that back isn't NNil
+                	MatchPattern* last = dynamic_cast<MatchPattern*>($1->back());
+                	$$ = $1;
+                	if (dynamic_cast<NNil*>(&(last->block))){
+                		// push this pattern into last and set block
+                		$$ = $1;
+                		last->patterns.push_back($3);
+                		
+                	}else{
+                		// create a new match pattern
+                		$$->push_back(new MatchPattern($3, *(new NNil())));
+                	}
+              }
               ;
      
 m_pattern : ident { $<ident>$ = $1; }
