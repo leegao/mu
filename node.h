@@ -193,9 +193,9 @@ public:
 
 class NFunctionDeclaration : public NExpression {
 public:
-    VariableList arguments;
+    ExpressionList arguments;
     NBlock& block;
-    NFunctionDeclaration(const VariableList& arguments, NBlock& block) :
+    NFunctionDeclaration(const ExpressionList& arguments, NBlock& block) :
         arguments(arguments), block(block) { }
 };
 

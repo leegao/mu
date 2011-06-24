@@ -11,6 +11,7 @@ extern "C" int yywrap() { }
 
 [ \t\n]					;
 [\;]					return TOKEN(TERMINATE);
+[\n][\n]				return TOKEN(TERMINATE);
 
 "and"					return TOKEN(TAND);
 "or"					return TOKEN(TOR);

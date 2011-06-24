@@ -42,8 +42,7 @@
  */
 %type <ident> ident
 %type <expr> numeric string expr list_decl inline_cond m_pattern list_pdecl match func_decl
-%type <varvec> func_decl_args 
-%type <exprvec> call_args list_el list_pel match_pattern
+%type <exprvec> call_args list_el list_pel match_pattern func_decl_args
 %type <block> program stmts block
 %type <stmt> stmt var_decl func_new while_syn for_syn if_syn elseif_syn elseend_syn
 %type <counter> for_syn_decl
@@ -92,9 +91,9 @@ func_new : TFUNCTION ident TLPAREN func_decl_args TRPAREN block {
             }
           ;
 
-func_decl_args : /*blank*/  { $$ = new VariableList(); }
-          | var_decl { $$ = new VariableList(); $$->push_back($<var_decl>1); }
-          | func_decl_args TCOMMA var_decl { $1->push_back($<var_decl>3); }
+func_decl_args : /*blank*/  { $$ = new ExpressionList(); }
+          | ident { $$ = new ExpressionList(); $$->push_back($<ident>1); }
+          | func_decl_args TCOMMA ident { $1->push_back($<ident>3); }
           ;
 
 while_syn : TWHILE expr block { $$ = new NWhileLoop(*$2, *$3); };
