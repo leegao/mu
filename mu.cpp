@@ -17,6 +17,9 @@ int main(int argc, char** argv){
 		std::cout << ">> ";
 		int i = yyparse();
 		std::cout << std::endl;
+
+		NStatement* last = programBlock->statements.back();
+		std::cout << last->toString() << std::endl;
 	}
 
 	return 0;

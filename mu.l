@@ -67,6 +67,8 @@ r\'(\\.|[^\\'])*\'		SAVE_TOKEN; return TSTRING_LITERAL;
 "?"						return TOKEN(TQUESTION);
 ":"						return TOKEN(TCOLON);
 "::"					return TOKEN(TPREPEND);
+"+="					return TOKEN(TPLUSEQ);
+"-="					return TOKEN(TMINUSEQ);
 
 .						printf("Unknown token!\n"); yyterminate();
 

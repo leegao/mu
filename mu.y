@@ -34,6 +34,7 @@
 %token <token> TLBRACKET TRBRACKET TEXP TBITOR TBITAND TBITXOR
 %token <token> TVAR TFUNCTION TTRUE TFALSE TMOD TFOR TIF TQUESTION TCOLON TPREPEND
 %token <token> TELSEIF TELSE TWHILE TBREAK TRETURN TIN TERMINATE TNIL TMATCH TWITH TCAT
+%token <token> TPLUSEQ TMINUSEQ
 
 /* Define the type of node our nonterminal symbols represent.
    The types refer to the %union declaration above. Ex: when
@@ -69,8 +70,9 @@ stmt : var_decl TERMINATE | func_new | while_syn | for_syn | elseend_syn
      | TBREAK TERMINATE { $$ = new NBreak(); }
      | TRETURN TERMINATE { $$ = new NReturn(*(new NNil())); }
      | TRETURN expr TERMINATE { $$ = new NReturn(*$2); }
-     | TERMINATE { $$ = new NExpressionStatement(*(new NDoNothing())); }
+     | TERMINATE { $$ = new NExpressionStatement(*(new NNil())); }
      ;
+     
 
 block : TLBRACE stmts TRBRACE { $$ = $2; }
       | TLBRACE TRBRACE { $$ = new NBlock(); }

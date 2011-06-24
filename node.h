@@ -20,6 +20,10 @@ public:
     virtual std::string emit(){
     	return "";
     }
+
+    virtual std::string toString(){
+    	return name();
+    }
 };
 
 class NExpression : public Node {
@@ -42,6 +46,9 @@ public:
 	ExpressionList patterns;
 	NMatch(NExpression& expr, ExpressionList patterns) :
 		expr(expr), patterns(patterns){}
+	std::string name(){
+		return "NMatch";
+	}
 };
 
 class MatchPattern : public NExpression{
@@ -50,6 +57,9 @@ public:
 	ExpressionList patterns;
 	MatchPattern(NExpression* pattern, NExpression& block) :
 		block(block) {patterns.push_back(pattern);}
+	std::string name(){
+		return "MatchPattern";
+	}
 };
 
 class NListElements : public NExpression{
@@ -57,7 +67,7 @@ public:
 	ExpressionList elements;
 	NListElements(ExpressionList& elements) : elements(elements){}
 	std::string name(){
-		return "NListStatement";
+		return "NListElements";
 	}
 };
 
@@ -65,6 +75,9 @@ class NNumber : public NExpression {
 public:
     double value;
     NNumber(double value) : value(value) { }
+	std::string name(){
+		return "NNumber";
+	}
 };
 
 class NInlineCond : public NExpression {
@@ -72,18 +85,27 @@ public:
 	NExpression cond, valid, invalid;
 	NInlineCond(NExpression& cond, NExpression& valid, NExpression& invalid) :
 		cond(cond), valid(valid), invalid(invalid) { }
+	std::string name(){
+		return "NInlineCond";
+	}
 };
 
 class NBoolean : public NExpression {
 public:
 	bool value;
 	NBoolean(bool value) : value(value){}
+	std::string name(){
+		return "NBoolean";
+	}
 };
 
 class NIdentifier : public NExpression {
 public:
-    std::string name;
-    NIdentifier(const std::string& name) : name(name) { }
+    std::string id;
+    NIdentifier(const std::string& id) : id(id) { }
+	std::string name(){
+		return "NIdentifier";
+	}
 };
 
 class NMethodCall : public NExpression {
@@ -93,6 +115,9 @@ public:
     NMethodCall(NExpression& id, ExpressionList& arguments) :
         id(id), arguments(arguments) { }
     NMethodCall(NExpression& id) : id(id) { }
+	std::string name(){
+		return "NMethodCall";
+	}
 };
 
 class NListIndex : public NExpression {
@@ -100,6 +125,9 @@ public:
 	NExpression& list, index;
 	NListIndex(NExpression& list, NExpression& index) :
 		list(list), index(index) {}
+	std::string name(){
+		return "NListIndex";
+	}
 };
 
 class NBinaryOperator : public NExpression {
@@ -109,6 +137,9 @@ public:
     NExpression& rhs;
     NBinaryOperator(NExpression& lhs, int op, NExpression& rhs) :
         lhs(lhs), rhs(rhs), op(op) { }
+	std::string name(){
+		return "NBinaryOperator";
+	}
 };
 
 class NAssignment : public NExpression {
@@ -117,16 +148,18 @@ public:
     NExpression& rhs;
     NAssignment(NIdentifier& lhs, NExpression& rhs) :
         lhs(lhs), rhs(rhs) { }
+	std::string name(){
+		return "NAssignment";
+	}
 };
 
 class NBlock : public NExpression {
 public:
     StatementList statements;
     NBlock() { }
-};
-
-class NDoNothing : public NExpression {
-
+	std::string name(){
+		return "NBlock";
+	}
 };
 
 class NNegation : public NExpression {
@@ -134,6 +167,9 @@ public:
 	NExpression& expr;
 	NNegation(NExpression& expr) :
 		expr(expr){}
+	std::string name(){
+		return "NNegation";
+	}
 };
 
 class NNot : public NExpression {
@@ -141,6 +177,9 @@ public:
 	NExpression& expr;
 	NNot(NExpression& expr) :
 		expr(expr){}
+	std::string name(){
+		return "NNot";
+	}
 };
 
 class NString : public NExpression {
@@ -149,6 +188,9 @@ public:
 	bool regex;
 	NString(std::string str);
 	void process();
+	std::string name(){
+		return "NString";
+	}
 };
 
 class NNewIndex : public NStatement {
@@ -156,11 +198,17 @@ public:
 	NExpression& list, index, value;
 	NNewIndex(NExpression& list, NExpression& index, NExpression& value) :
 		list(list), index(index), value(value) {}
+	std::string name(){
+		return "NNewIndex";
+	}
 };
 
 class NNil : public NExpression {
 public:
 	NNil(){}
+	std::string name(){
+		return "NNil";
+	}
 };
 
 class NExpressionStatement : public NStatement {
@@ -168,10 +216,16 @@ public:
     NExpression& expression;
     NExpressionStatement(NExpression& expression) :
         expression(expression) { }
+	std::string name(){
+		return "NExpressionStatement";
+	}
 };
 
 class NBreak : public NStatement {
-
+public:
+	std::string name(){
+		return "NBreak";
+	}
 };
 
 class NReturn : public NStatement {
@@ -179,6 +233,9 @@ public:
 	NExpression& return_expr;
 	NReturn(NExpression& return_expr) :
 		return_expr(return_expr){}
+	std::string name(){
+		return "NReturn";
+	}
 };
 
 class NVariableDeclaration : public NStatement {
@@ -189,6 +246,9 @@ public:
         id(id) { }
     NVariableDeclaration(NIdentifier& id, NExpression *assignmentExpr) :
         id(id), assignmentExpr(assignmentExpr) { }
+	std::string name(){
+		return "NVariableDeclaration";
+	}
 };
 
 class NFunctionDeclaration : public NExpression {
@@ -197,6 +257,9 @@ public:
     NBlock& block;
     NFunctionDeclaration(const ExpressionList& arguments, NBlock& block) :
         arguments(arguments), block(block) { }
+	std::string name(){
+		return "NFunctionDeclaration";
+	}
 };
 
 class NWhileLoop : public NStatement {
@@ -205,6 +268,9 @@ public:
     NBlock& block;
     NWhileLoop(NExpression& cond, NBlock& block) :
         cond(cond), block(block) { }
+	std::string name(){
+		return "NWhileLoop";
+	}
 };
 
 class ForCounter{};
@@ -240,6 +306,9 @@ public:
 	NBlock& block;
 	NForLoop(ForCounter& counter, NBlock& block) :
 		counter(counter), block(block) {}
+	std::string name(){
+		return "NForLoop";
+	}
 };
 
 class NIf : public NStatement {
@@ -250,4 +319,7 @@ public:
 		cond(cond), block(block), else_(else_) {}
 	void else_if(NExpression& cond, NBlock& block);
 	void else_end(NBlock& block);
+	std::string name(){
+		return "NIf";
+	}
 };

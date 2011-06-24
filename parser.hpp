@@ -89,7 +89,9 @@
      TNIL = 305,
      TMATCH = 306,
      TWITH = 307,
-     TCAT = 308
+     TCAT = 308,
+     TPLUSEQ = 309,
+     TMINUSEQ = 310
    };
 #endif
 
@@ -118,7 +120,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 122 "parser.hpp"
+#line 124 "parser.hpp"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
