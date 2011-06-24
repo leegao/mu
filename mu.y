@@ -57,7 +57,7 @@
 
 %%
 
-program : stmts { programBlock = $1; printf("%x\n", $1); return 0; }
+program : stmts { programBlock = $1; return 0; }
         ;
 
 stmts : stmt { $$ = new NBlock(); $$->statements.push_back($<stmt>1); }
@@ -90,7 +90,8 @@ while_syn : TWHILE expr block { $$ = new NWhileLoop(*$2, *$3); };
 
 for_syn_decl : ident TIN expr { $$ = new InCounter(*$1, *$3); }
              | expr TCOMMA expr TCOMMA expr { $$ = new LoopCounter(*$1, *$3, *$5); }
-             | TRPAREN for_syn_decl TLPAREN { $$ = $2; }
+             | var_decl TCOMMA expr TCOMMA expr { $$ = new VarLoopCounter(*$1, *$3, *$5); }
+             | TLPAREN for_syn_decl TRPAREN { $$ = $2; }
              ;
 
 for_syn : TFOR for_syn_decl block { $$ = new NForLoop(*$2, *$3); };

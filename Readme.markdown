@@ -47,3 +47,18 @@ and variable declaration:
 var identifier;
 var identifier = xxx;
 ```
+Conditional statements are also supported. The syntax of a while loop is:
+
+``` javascript
+while expr {
+	...
+}
+```
+
+and the for loop:
+
+``` javascript
+for (var i = 0, i < n, i = i + 1){
+	...
+}
+```
