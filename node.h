@@ -14,18 +14,35 @@ typedef std::vector<NVariableDeclaration*> VariableList;
 class Node {
 public:
     virtual ~Node() {}
+    virtual std::string name(){
+    	return "Node";
+    }
+    virtual std::string emit(){
+    	return "";
+    }
 };
 
 class NExpression : public Node {
+public:
+	virtual std::string name(){
+		return "NExpression";
+	}
 };
 
 class NStatement : public Node {
+public:
+	virtual std::string name(){
+		return "NStatement";
+	}
 };
 
 class NListElements : public NExpression{
 public:
 	ExpressionList elements;
 	NListElements(ExpressionList& elements) : elements(elements){}
+	std::string name(){
+		return "NListStatement";
+	}
 };
 
 class NNumber : public NExpression {
@@ -111,11 +128,26 @@ public:
 	void process();
 };
 
+class NNil : public NExpression {
+
+};
+
 class NExpressionStatement : public NStatement {
 public:
     NExpression& expression;
     NExpressionStatement(NExpression& expression) :
         expression(expression) { }
+};
+
+class NBreak : public NStatement {
+
+};
+
+class NReturn : public NStatement {
+public:
+	NExpression& return_expr;
+	NReturn(NExpression& return_expr) :
+		return_expr(return_expr){}
 };
 
 class NVariableDeclaration : public NStatement {

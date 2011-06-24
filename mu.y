@@ -33,7 +33,7 @@
 %token <token> TPLUS TMINUS TMUL TDIV TAND TOR TUNOT
 %token <token> TLBRACKET TRBRACKET TEXP TBITOR TBITAND TBITXOR
 %token <token> TVAR TFUNCTION TTRUE TFALSE TMOD TFOR TIF TQUESTION TCOLON
-%token <token> TELSEIF TELSE TWHILE TBREAK TRETURN TIN TERMINATE TNIL TMATCH TWITH
+%token <token> TELSEIF TELSE TWHILE TBREAK TRETURN TIN TERMINATE TNIL TMATCH TWITH TCAT
 
 /* Define the type of node our nonterminal symbols represent.
    The types refer to the %union declaration above. Ex: when
@@ -66,6 +66,9 @@ stmts : stmt { $$ = new NBlock(); $$->statements.push_back($<stmt>1); }
 
 stmt : var_decl TERMINATE | func_decl | while_syn | for_syn | elseend_syn
      | expr TERMINATE { $$ = new NExpressionStatement(*$1); }
+     | TBREAK TERMINATE { $$ = new NBreak(); }
+     | TRETURN TERMINATE { $$ = new NReturn(*(new NNil())); }
+     | TRETURN expr TERMINATE { $$ = new NReturn(*$2); }
      | TERMINATE { $$ = new NExpressionStatement(*(new NDoNothing())); }
      ;
 
@@ -150,7 +153,7 @@ list_el : /*blank*/ { $$ = new ExpressionList(); }
 
 comparison : TCEQ | TCNE | TCLT | TCLE | TCGT | TCGE
            | TPLUS | TMINUS | TMUL | TDIV | TAND | TOR | TBITAND
-           | TBITOR | TBITXOR | TDOT | TMOD
+           | TBITOR | TBITXOR | TCAT | TMOD
            ;
 
 %%

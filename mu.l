@@ -53,6 +53,7 @@ r\'(\\.|[^\\'])*\'		SAVE_TOKEN; return TSTRING_LITERAL;
 "{"						return TOKEN(TLBRACE);
 "}"						return TOKEN(TRBRACE);
 "."						return TOKEN(TDOT);
+".."					return TOKEN(TCAT);
 ","						return TOKEN(TCOMMA);
 "+"						return TOKEN(TPLUS);
 "-"						return TOKEN(TMINUS);
