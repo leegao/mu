@@ -84,7 +84,10 @@
      TBREAK = 300,
      TRETURN = 301,
      TIN = 302,
-     TERMINATE = 303
+     TERMINATE = 303,
+     TNIL = 304,
+     TMATCH = 305,
+     TWITH = 306
    };
 #endif
 
@@ -113,7 +116,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 117 "parser.hpp"
+#line 120 "parser.hpp"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

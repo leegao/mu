@@ -3,3 +3,5 @@ Debug
 Release
 .project
 .cproject
+re2/re2/.hg
+re2/re2/.hgignore

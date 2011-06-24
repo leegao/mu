@@ -33,7 +33,7 @@
 %token <token> TPLUS TMINUS TMUL TDIV TAND TOR TUNOT
 %token <token> TLBRACKET TRBRACKET TEXP TBITOR TBITAND TBITXOR
 %token <token> TVAR TFUNCTION TTRUE TFALSE TMOD TFOR TIF TQUESTION TCOLON
-%token <token> TELSEIF TELSE TWHILE TBREAK TRETURN TIN TERMINATE
+%token <token> TELSEIF TELSE TWHILE TBREAK TRETURN TIN TERMINATE TNIL TMATCH TWITH
 
 /* Define the type of node our nonterminal symbols represent.
    The types refer to the %union declaration above. Ex: when
@@ -130,7 +130,8 @@ expr : ident TEQUAL expr { $$ = new NAssignment(*$<ident>1, *$3); }
      | TTRUE { $$ = new NBoolean(true); }
      | TFALSE { $$ = new NBoolean(false); }
      | expr comparison expr { $$ = new NBinaryOperator(*$1, $2, *$3); }
-     | TUNOT expr { $$ = new NNegation(*$2); }
+     | TUNOT expr { $$ = new NNot(*$2); }
+     | TMINUS expr { $$ = new NNegation(*$2); }
      | TLPAREN expr TRPAREN { $$ = $2; }
      ;
 

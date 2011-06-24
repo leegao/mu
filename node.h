@@ -96,6 +96,13 @@ public:
 		expr(expr){}
 };
 
+class NNot : public NExpression {
+public:
+	NExpression& expr;
+	NNot(NExpression& expr) :
+		expr(expr){}
+};
+
 class NString : public NExpression {
 public:
 	std::string str;
