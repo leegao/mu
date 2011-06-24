@@ -225,6 +225,9 @@ public:
 	std::string name(){
 		return "NNil";
 	}
+	std::string toString(){
+		return "nil";
+	}
 };
 
 class NExpressionStatement : public NStatement {
@@ -236,7 +239,7 @@ public:
 		return "NExpressionStatement";
 	}
 	std::string toString(){
-		return expression->toString();
+		return expression->toString() + ";";
 	}
 };
 
@@ -245,6 +248,9 @@ public:
 	std::string name(){
 		return "NBreak";
 	}
+	std::string toString(){
+		return "break;";
+	}
 };
 
 class NReturn : public NStatement {
@@ -252,9 +258,13 @@ public:
 	NExpression* return_expr;
 	NReturn(NExpression* return_expr) :
 		return_expr(return_expr){}
+	NReturn(){
+		return_expr = new NNil();
+	}
 	std::string name(){
 		return "NReturn";
 	}
+	std::string toString();
 };
 
 class NVariableDeclaration : public NStatement {
@@ -268,6 +278,7 @@ public:
 	std::string name(){
 		return "NVariableDeclaration";
 	}
+	std::string toString();
 };
 
 class NFunctionDeclaration : public NExpression {

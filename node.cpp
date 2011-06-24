@@ -211,3 +211,13 @@ string NNewIndex::toString(){
 	std::string ret = list->toString();
 	return ret + "["+index->toString() + "] = " + value->toString() + ";";
 }
+
+string NReturn::toString(){
+	std::string ret = "return ";
+	return ret + return_expr->toString() + ";";
+}
+
+string NVariableDeclaration::toString(){
+	std::string ret = "var ";
+	return ret + id->toString() + " = " + assignmentExpr->toString() + ";";
+}
