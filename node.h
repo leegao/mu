@@ -88,11 +88,18 @@ public:
 
 class NMethodCall : public NExpression {
 public:
-    const NIdentifier& id;
+    NExpression& id;
     ExpressionList arguments;
-    NMethodCall(const NIdentifier& id, ExpressionList& arguments) :
+    NMethodCall(NExpression& id, ExpressionList& arguments) :
         id(id), arguments(arguments) { }
-    NMethodCall(const NIdentifier& id) : id(id) { }
+    NMethodCall(NExpression& id) : id(id) { }
+};
+
+class NListIndex : public NExpression {
+public:
+	NExpression& list, index;
+	NListIndex(NExpression& list, NExpression& index) :
+		list(list), index(index) {}
 };
 
 class NBinaryOperator : public NExpression {
@@ -177,14 +184,12 @@ public:
         id(id), assignmentExpr(assignmentExpr) { }
 };
 
-class NFunctionDeclaration : public NStatement {
+class NFunctionDeclaration : public NExpression {
 public:
-    const NIdentifier& id;
     VariableList arguments;
     NBlock& block;
-    NFunctionDeclaration(const NIdentifier& id,
-            const VariableList& arguments, NBlock& block) :
-        id(id), arguments(arguments), block(block) { }
+    NFunctionDeclaration(const VariableList& arguments, NBlock& block) :
+        arguments(arguments), block(block) { }
 };
 
 class NWhileLoop : public NStatement {

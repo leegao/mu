@@ -41,11 +41,11 @@
    calling an (NIdentifier*). It makes the compiler happy.
  */
 %type <ident> ident
-%type <expr> numeric string expr list_decl inline_cond m_pattern list_pdecl match
+%type <expr> numeric string expr list_decl inline_cond m_pattern list_pdecl match func_decl
 %type <varvec> func_decl_args 
 %type <exprvec> call_args list_el list_pel match_pattern
 %type <block> program stmts block
-%type <stmt> stmt var_decl func_decl while_syn for_syn if_syn elseif_syn elseend_syn
+%type <stmt> stmt var_decl func_new while_syn for_syn if_syn elseif_syn elseend_syn
 %type <counter> for_syn_decl
 %type <token> comparison pattern_cmp
 
@@ -64,7 +64,7 @@ stmts : stmt { $$ = new NBlock(); $$->statements.push_back($<stmt>1); }
       | stmts stmt { $1->statements.push_back($<stmt>2); }
       ;
 
-stmt : var_decl TERMINATE | func_decl | while_syn | for_syn | elseend_syn
+stmt : var_decl TERMINATE | func_new | while_syn | for_syn | elseend_syn
      | expr TERMINATE { $$ = new NExpressionStatement(*$1); }
      | TBREAK TERMINATE { $$ = new NBreak(); }
      | TRETURN TERMINATE { $$ = new NReturn(*(new NNil())); }
@@ -80,8 +80,15 @@ var_decl : TVAR ident { $$ = new NVariableDeclaration(*$2); }
          | TVAR ident TEQUAL expr { $$ = new NVariableDeclaration(*$2, $4); }
          ;
 
-func_decl : TFUNCTION ident TLPAREN func_decl_args TRPAREN block
-            { $$ = new NFunctionDeclaration(*$2, *$4, *$6); delete $4; }
+func_decl : TFUNCTION TLPAREN func_decl_args TRPAREN block
+            { $$ = new NFunctionDeclaration(*$3, *$5); delete $3; }
+          ;
+
+func_new : TFUNCTION ident TLPAREN func_decl_args TRPAREN block { 
+            	NFunctionDeclaration* dec = new NFunctionDeclaration(*$4, *$6); 
+            	$$ = new NVariableDeclaration(*$2, dec);
+            	delete $4; 
+            }
           ;
 
 func_decl_args : /*blank*/  { $$ = new VariableList(); }
@@ -124,13 +131,15 @@ inline_cond : expr TQUESTION expr TCOLON expr { $$ = new NInlineCond(*$1, *$3, *
             ;
 
 expr : ident TEQUAL expr { $$ = new NAssignment(*$<ident>1, *$3); }
-     | ident TLPAREN call_args TRPAREN { $$ = new NMethodCall(*$1, *$3); delete $3; }
+     | expr TLPAREN call_args TRPAREN { $$ = new NMethodCall(*$1, *$3); delete $3; }
      | ident { $<ident>$ = $1; }
+     | expr TLBRACKET expr TRBRACKET { $$ = new NListIndex(*$1, *$3); }
      | numeric
      | string
      | list_decl
      | inline_cond
      | match
+     | func_decl
      | TTRUE { $$ = new NBoolean(true); }
      | TFALSE { $$ = new NBoolean(false); }
      | TNIL { $$ = new NNil(); }
