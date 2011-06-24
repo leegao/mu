@@ -24,3 +24,16 @@ NString::NString(std::string str_){
 void NString::process(){
 	if (raw) return; // good enough
 }
+
+void NIf::else_if(NExpression& cond, NBlock& block){
+	if (else_.statements.empty()){
+		// If else block is empty, then we just push this back
+		else_.statements.push_back((new NIf(cond, block, *(new NBlock()))));
+		return;
+	}
+	NIf* next;
+	if (else_.statements.size() == 1 && (next = dynamic_cast<NIf*>(else_.statements.front()))){
+		// If else block contains a single if statement, call its else_if too
+		next->else_if(cond, block);
+	}
+}

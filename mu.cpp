@@ -16,7 +16,8 @@ int main(int argc, char** argv){
 	while(1){
 		std::cout << ">> ";
 		int i = yyparse();
-		std::cout << "<< " << i << std::endl;}
+		std::cout << std::endl;
+	}
 
 	return 0;
 }
