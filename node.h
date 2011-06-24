@@ -181,4 +181,5 @@ public:
 	NIf(NExpression& cond, NBlock& block, NBlock& else_) :
 		cond(cond), block(block), else_(else_) {}
 	void else_if(NExpression& cond, NBlock& block);
+	void else_end(NBlock& block);
 };

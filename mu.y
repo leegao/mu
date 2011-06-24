@@ -45,7 +45,7 @@
 %type <varvec> func_decl_args 
 %type <exprvec> call_args list_el
 %type <block> program stmts block
-%type <stmt> stmt var_decl func_decl while_syn for_syn if_syn elseif_syn
+%type <stmt> stmt var_decl func_decl while_syn for_syn if_syn elseif_syn elseend_syn
 %type <counter> for_syn_decl
 %type <token> comparison
 
@@ -64,7 +64,7 @@ stmts : stmt { $$ = new NBlock(); $$->statements.push_back($<stmt>1); }
       | stmts stmt { $1->statements.push_back($<stmt>2); }
       ;
 
-stmt : var_decl TERMINATE | func_decl | while_syn | for_syn | elseif_syn
+stmt : var_decl TERMINATE | func_decl | while_syn | for_syn | elseend_syn
      | expr TERMINATE { $$ = new NExpressionStatement(*$1); }
      | TERMINATE { $$ = new NExpressionStatement(*(new NDoNothing())); }
      ;
@@ -102,6 +102,10 @@ if_syn : TIF expr block { $$ = new NIf(*$2, *$3, *(new NBlock())); }
 elseif_syn : if_syn { $$ = $1; }
            | elseif_syn TELSEIF expr block { $$ = $1; (dynamic_cast<NIf*> ($$))->else_if(*$3, *$4); }
            ;
+
+elseend_syn : elseif_syn { $$ = $1; }
+            | elseif_syn TELSE block { $$ = $1; (dynamic_cast<NIf*> ($$))->else_end(*$3); }
+            ;
 
 ident : TIDENTIFIER { $$ = new NIdentifier(*$1); delete $1; }
       ;

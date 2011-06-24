@@ -27,7 +27,7 @@ void NString::process(){
 
 void NIf::else_if(NExpression& cond, NBlock& block){
 	if (else_.statements.empty()){
-		// If else block is empty, then we just push this back
+		// If else block is empty, then we just push a new if back
 		else_.statements.push_back((new NIf(cond, block, *(new NBlock()))));
 		return;
 	}
@@ -35,5 +35,18 @@ void NIf::else_if(NExpression& cond, NBlock& block){
 	if (else_.statements.size() == 1 && (next = dynamic_cast<NIf*>(else_.statements.front()))){
 		// If else block contains a single if statement, call its else_if too
 		next->else_if(cond, block);
+	}
+}
+
+void NIf::else_end(NBlock& block){
+	if (else_.statements.empty()){
+		// If else block is empty, then we just push this block
+		else_ = block;
+		return;
+	}
+	NIf* next;
+	if (else_.statements.size() == 1 && (next = dynamic_cast<NIf*>(else_.statements.front()))){
+		// If else block contains a single if statement, call its else_end too
+		next->else_end(block);
 	}
 }
