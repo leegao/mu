@@ -146,9 +146,16 @@ public:
 class NString : public NExpression {
 public:
 	std::string str;
-	bool raw;
+	bool regex;
 	NString(std::string str);
 	void process();
+};
+
+class NNewIndex : public NStatement {
+public:
+	NExpression& list, index, value;
+	NNewIndex(NExpression& list, NExpression& index, NExpression& value) :
+		list(list), index(index), value(value) {}
 };
 
 class NNil : public NExpression {

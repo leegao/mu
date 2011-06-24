@@ -11,18 +11,17 @@ using namespace std;
 
 NString::NString(std::string str_){
 	// invariant: at least 2 characters
-	raw = false;
+	regex = false;
 	if (str_[0] == 'r'){
 		str_ = str_.substr(1);
-		raw = true;
+		regex = true;
 	}
 	str = str_.substr(1, str_.length()-2);
 	process();
-	//cout << str << " " << raw << endl;
 }
 
 void NString::process(){
-	if (raw) return; // good enough
+	if (regex) return; // good enough
 }
 
 void NIf::else_if(NExpression& cond, NBlock& block){

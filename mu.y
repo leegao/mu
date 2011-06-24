@@ -66,6 +66,7 @@ stmts : stmt { $$ = new NBlock(); $$->statements.push_back($<stmt>1); }
 
 stmt : var_decl TERMINATE | func_new | while_syn | for_syn | elseend_syn
      | expr TERMINATE { $$ = new NExpressionStatement(*$1); }
+     | expr TLBRACKET expr TRBRACKET TEQUAL expr TERMINATE { $$ = new NNewIndex(*$1, *$3, *$6); }
      | TBREAK TERMINATE { $$ = new NBreak(); }
      | TRETURN TERMINATE { $$ = new NReturn(*(new NNil())); }
      | TRETURN expr TERMINATE { $$ = new NReturn(*$2); }
