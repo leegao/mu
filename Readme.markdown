@@ -59,7 +59,7 @@ and the for loop:
 
 ``` javascript
 // Using a counter
-for (var i = 0, i < n, i = i + 1){
+for (var i = 0, i < n, i = i + 1) {
 	...
 }
 
@@ -68,3 +68,20 @@ for el in iterable {
 	...
 }
 ```
+
+The if statements:
+
+``` javascript
+if expr {
+	...
+} elseif expr {
+	...
+} else {
+	...
+}
+```
+
+Be wary however that it is not determinable whether the elseif cases are terminating in the entire if block, 
+hence the parser will look towards the next statement to determine whether the if conditional terminated.
+
+Finally, all expressions must be terminated with a semicolon to be considered a statement.
