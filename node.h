@@ -173,3 +173,12 @@ public:
 	NForLoop(ForCounter& counter, NBlock& block) :
 		counter(counter), block(block) {}
 };
+
+class NIf : public NStatement {
+public:
+	NExpression& cond;
+	NBlock& block;
+	NStatement& else_;
+	NIf(NExpression& cond, NBlock& block, NStatement& else_) :
+		cond(cond), block(block), else_(else_) {}
+};
