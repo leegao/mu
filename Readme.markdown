@@ -58,7 +58,13 @@ while expr {
 and the for loop:
 
 ``` javascript
+// Using a counter
 for (var i = 0, i < n, i = i + 1){
+	...
+}
+
+// Foreach
+for el in iterable {
 	...
 }
 ```
