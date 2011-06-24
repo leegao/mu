@@ -32,7 +32,7 @@
 %token <token> TLPAREN TRPAREN TLBRACE TRBRACE TCOMMA TDOT
 %token <token> TPLUS TMINUS TMUL TDIV TAND TOR TUNOT
 %token <token> TLBRACKET TRBRACKET TEXP TBITOR TBITAND TBITXOR
-%token <token> TVAR TFUNCTION TTRUE TFALSE TMOD TFOR TIF TQUESTION TCOLON
+%token <token> TVAR TFUNCTION TTRUE TFALSE TMOD TFOR TIF TQUESTION TCOLON TPREPEND
 %token <token> TELSEIF TELSE TWHILE TBREAK TRETURN TIN TERMINATE TNIL TMATCH TWITH TCAT
 
 /* Define the type of node our nonterminal symbols represent.
@@ -41,13 +41,13 @@
    calling an (NIdentifier*). It makes the compiler happy.
  */
 %type <ident> ident
-%type <expr> numeric string expr list_decl inline_cond
+%type <expr> numeric string expr list_decl inline_cond m_pattern list_pdecl match_pattern
 %type <varvec> func_decl_args 
-%type <exprvec> call_args list_el
+%type <exprvec> call_args list_el list_pel
 %type <block> program stmts block
 %type <stmt> stmt var_decl func_decl while_syn for_syn if_syn elseif_syn elseend_syn
 %type <counter> for_syn_decl
-%type <token> comparison
+%type <token> comparison pattern_cmp
 
 /* Operator precedence for mathematical operators */
 %left TPLUS TMINUS
@@ -132,11 +132,45 @@ expr : ident TEQUAL expr { $$ = new NAssignment(*$<ident>1, *$3); }
      | inline_cond
      | TTRUE { $$ = new NBoolean(true); }
      | TFALSE { $$ = new NBoolean(false); }
+     | TNIL { $$ = new NNil(); }
      | expr comparison expr { $$ = new NBinaryOperator(*$1, $2, *$3); }
      | TUNOT expr { $$ = new NNot(*$2); }
      | TMINUS expr { $$ = new NNegation(*$2); }
      | TLPAREN expr TRPAREN { $$ = $2; }
      ;
+
+match_pattern : m_pattern block { $$ = new MatchPattern($1, *$2); }
+              | m_pattern { $$ = new MatchPattern($1, *(new NNil())); }
+              
+              ;
+     
+m_pattern : ident { $<ident>$ = $1; }
+          | string
+          | numeric
+          | list_pdecl
+          | TNIL { $$ = new NNil(); }
+          | TTRUE { $$ = new NBoolean(true); }
+          | TFALSE { $$ = new NBoolean(false); }
+          | TUNOT ident { $$ = new NNot(*$2); }
+          | TMINUS numeric { $$ = new NNegation(*$2); }
+          | TMINUS ident { $$ = new NNegation(*$2); }
+          | m_pattern TPREPEND m_pattern { $$ = new NBinaryOperator(*$1, $2, *$3); }
+          | ident pattern_cmp numeric { $$ = new NBinaryOperator(*$1, $2, *$3); }
+          | numeric pattern_cmp ident { $$ = new NBinaryOperator(*$1, $2, *$3); }
+          | numeric comparison numeric { $$ = new NBinaryOperator(*$1, $2, *$3); }
+          | ident TLPAREN call_args TRPAREN { $$ = new NMethodCall(*$1, *$3); delete $3; }
+          | TLPAREN m_pattern TRPAREN { $$ = $2; }
+          ;
+
+list_pdecl : TLBRACKET list_pel TRBRACKET { $$ = new NListElements(*$2); }
+           ;
+
+list_pel : /*blank*/ { $$ = new ExpressionList(); }
+         | m_pattern { $$ = new ExpressionList(); $$->push_back($1); }
+         | list_pel TCOMMA m_pattern { $1->push_back($3); }
+         ;
+
+pattern_cmp : TPLUS | TMINUS | TMUL | TDIV 
 
 call_args : /*blank*/  { $$ = new ExpressionList(); }
           | expr { $$ = new ExpressionList(); $$->push_back($1); }
@@ -153,7 +187,7 @@ list_el : /*blank*/ { $$ = new ExpressionList(); }
 
 comparison : TCEQ | TCNE | TCLT | TCLE | TCGT | TCGE
            | TPLUS | TMINUS | TMUL | TDIV | TAND | TOR | TBITAND
-           | TBITOR | TBITXOR | TCAT | TMOD
+           | TBITOR | TBITXOR | TCAT | TMOD | TPREPEND
            ;
 
 %%

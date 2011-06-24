@@ -36,6 +36,14 @@ public:
 	}
 };
 
+class MatchPattern : public NExpression{
+public:
+	NExpression& block;
+	ExpressionList patterns;
+	MatchPattern(NExpression* pattern, NExpression& block) :
+		block(block) {patterns.push_back(pattern);}
+};
+
 class NListElements : public NExpression{
 public:
 	ExpressionList elements;
@@ -129,7 +137,8 @@ public:
 };
 
 class NNil : public NExpression {
-
+public:
+	NNil(){}
 };
 
 class NExpressionStatement : public NStatement {

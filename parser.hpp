@@ -78,17 +78,18 @@
      TIF = 294,
      TQUESTION = 295,
      TCOLON = 296,
-     TELSEIF = 297,
-     TELSE = 298,
-     TWHILE = 299,
-     TBREAK = 300,
-     TRETURN = 301,
-     TIN = 302,
-     TERMINATE = 303,
-     TNIL = 304,
-     TMATCH = 305,
-     TWITH = 306,
-     TCAT = 307
+     TPREPEND = 297,
+     TELSEIF = 298,
+     TELSE = 299,
+     TWHILE = 300,
+     TBREAK = 301,
+     TRETURN = 302,
+     TIN = 303,
+     TERMINATE = 304,
+     TNIL = 305,
+     TMATCH = 306,
+     TWITH = 307,
+     TCAT = 308
    };
 #endif
 
@@ -117,7 +118,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 121 "parser.hpp"
+#line 122 "parser.hpp"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
