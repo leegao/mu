@@ -1746,14 +1746,14 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 68 "mu.y"
-    { (yyval.stmt) = new NExpressionStatement(*(yyvsp[(1) - (2)].expr)); ;}
+    { (yyval.stmt) = new NExpressionStatement((yyvsp[(1) - (2)].expr)); ;}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
 #line 69 "mu.y"
-    { (yyval.stmt) = new NNewIndex(*(yyvsp[(1) - (7)].expr), *(yyvsp[(3) - (7)].expr), *(yyvsp[(6) - (7)].expr)); ;}
+    { (yyval.stmt) = new NNewIndex((yyvsp[(1) - (7)].expr), (yyvsp[(3) - (7)].expr), (yyvsp[(6) - (7)].expr)); ;}
     break;
 
   case 12:
@@ -1767,21 +1767,21 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 71 "mu.y"
-    { (yyval.stmt) = new NReturn(*(new NNil())); ;}
+    { (yyval.stmt) = new NReturn((new NNil())); ;}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
 #line 72 "mu.y"
-    { (yyval.stmt) = new NReturn(*(yyvsp[(2) - (3)].expr)); ;}
+    { (yyval.stmt) = new NReturn((yyvsp[(2) - (3)].expr)); ;}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
 #line 73 "mu.y"
-    { (yyval.stmt) = new NExpressionStatement(*(new NNil())); ;}
+    { (yyval.stmt) = new NExpressionStatement((new NNil())); ;}
     break;
 
   case 16:
@@ -1802,21 +1802,21 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 81 "mu.y"
-    { (yyval.stmt) = new NVariableDeclaration(*(yyvsp[(2) - (2)].ident)); ;}
+    { (yyval.stmt) = new NVariableDeclaration((yyvsp[(2) - (2)].ident)); ;}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
 #line 82 "mu.y"
-    { (yyval.stmt) = new NVariableDeclaration(*(yyvsp[(2) - (4)].ident), (yyvsp[(4) - (4)].expr)); ;}
+    { (yyval.stmt) = new NVariableDeclaration((yyvsp[(2) - (4)].ident), (yyvsp[(4) - (4)].expr)); ;}
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
 #line 86 "mu.y"
-    { (yyval.expr) = new NFunctionDeclaration(*(yyvsp[(3) - (5)].exprvec), *(yyvsp[(5) - (5)].block)); delete (yyvsp[(3) - (5)].exprvec); ;}
+    { (yyval.expr) = new NFunctionDeclaration(*(yyvsp[(3) - (5)].exprvec), (yyvsp[(5) - (5)].block)); delete (yyvsp[(3) - (5)].exprvec); ;}
     break;
 
   case 21:
@@ -1824,8 +1824,8 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 89 "mu.y"
     { 
-            	NFunctionDeclaration* dec = new NFunctionDeclaration(*(yyvsp[(4) - (6)].exprvec), *(yyvsp[(6) - (6)].block)); 
-            	(yyval.stmt) = new NVariableDeclaration(*(yyvsp[(2) - (6)].ident), dec);
+            	NFunctionDeclaration* dec = new NFunctionDeclaration(*(yyvsp[(4) - (6)].exprvec), (yyvsp[(6) - (6)].block)); 
+            	(yyval.stmt) = new NVariableDeclaration((yyvsp[(2) - (6)].ident), dec);
             	delete (yyvsp[(4) - (6)].exprvec); 
             ;}
     break;
@@ -1855,28 +1855,28 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 101 "mu.y"
-    { (yyval.stmt) = new NWhileLoop(*(yyvsp[(2) - (3)].expr), *(yyvsp[(3) - (3)].block)); ;}
+    { (yyval.stmt) = new NWhileLoop((yyvsp[(2) - (3)].expr), (yyvsp[(3) - (3)].block)); ;}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
 #line 103 "mu.y"
-    { (yyval.counter) = new InCounter(*(yyvsp[(1) - (3)].ident), *(yyvsp[(3) - (3)].expr)); ;}
+    { (yyval.counter) = new InCounter((yyvsp[(1) - (3)].ident), (yyvsp[(3) - (3)].expr)); ;}
     break;
 
   case 27:
 
 /* Line 1455 of yacc.c  */
 #line 104 "mu.y"
-    { (yyval.counter) = new LoopCounter(*(yyvsp[(1) - (5)].expr), *(yyvsp[(3) - (5)].expr), *(yyvsp[(5) - (5)].expr)); ;}
+    { (yyval.counter) = new LoopCounter((yyvsp[(1) - (5)].expr), (yyvsp[(3) - (5)].expr), (yyvsp[(5) - (5)].expr)); ;}
     break;
 
   case 28:
 
 /* Line 1455 of yacc.c  */
 #line 105 "mu.y"
-    { (yyval.counter) = new VarLoopCounter(*(yyvsp[(1) - (5)].stmt), *(yyvsp[(3) - (5)].expr), *(yyvsp[(5) - (5)].expr)); ;}
+    { (yyval.counter) = new VarLoopCounter((yyvsp[(1) - (5)].stmt), (yyvsp[(3) - (5)].expr), (yyvsp[(5) - (5)].expr)); ;}
     break;
 
   case 29:
@@ -1890,14 +1890,14 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 109 "mu.y"
-    { (yyval.stmt) = new NForLoop(*(yyvsp[(2) - (3)].counter), *(yyvsp[(3) - (3)].block)); ;}
+    { (yyval.stmt) = new NForLoop((yyvsp[(2) - (3)].counter), (yyvsp[(3) - (3)].block)); ;}
     break;
 
   case 31:
 
 /* Line 1455 of yacc.c  */
 #line 111 "mu.y"
-    { (yyval.stmt) = new NIf(*(yyvsp[(2) - (3)].expr), *(yyvsp[(3) - (3)].block), *(new NBlock())); ;}
+    { (yyval.stmt) = new NIf((yyvsp[(2) - (3)].expr), (yyvsp[(3) - (3)].block), (new NBlock())); ;}
     break;
 
   case 32:
@@ -1911,7 +1911,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 115 "mu.y"
-    { (yyval.stmt) = (yyvsp[(1) - (4)].stmt); (dynamic_cast<NIf*> ((yyval.stmt)))->else_if(*(yyvsp[(3) - (4)].expr), *(yyvsp[(4) - (4)].block)); ;}
+    { (yyval.stmt) = (yyvsp[(1) - (4)].stmt); (dynamic_cast<NIf*> ((yyval.stmt)))->else_if((yyvsp[(3) - (4)].expr), (yyvsp[(4) - (4)].block)); ;}
     break;
 
   case 34:
@@ -1925,7 +1925,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 119 "mu.y"
-    { (yyval.stmt) = (yyvsp[(1) - (3)].stmt); (dynamic_cast<NIf*> ((yyval.stmt)))->else_end(*(yyvsp[(3) - (3)].block)); ;}
+    { (yyval.stmt) = (yyvsp[(1) - (3)].stmt); (dynamic_cast<NIf*> ((yyval.stmt)))->else_end((yyvsp[(3) - (3)].block)); ;}
     break;
 
   case 36:
@@ -1960,21 +1960,21 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 132 "mu.y"
-    { (yyval.expr) = new NInlineCond(*(yyvsp[(1) - (5)].expr), *(yyvsp[(3) - (5)].expr), *(yyvsp[(5) - (5)].expr)); ;}
+    { (yyval.expr) = new NInlineCond((yyvsp[(1) - (5)].expr), (yyvsp[(3) - (5)].expr), (yyvsp[(5) - (5)].expr)); ;}
     break;
 
   case 41:
 
 /* Line 1455 of yacc.c  */
 #line 135 "mu.y"
-    { (yyval.expr) = new NAssignment(*(yyvsp[(1) - (3)].ident), *(yyvsp[(3) - (3)].expr)); ;}
+    { (yyval.expr) = new NAssignment((yyvsp[(1) - (3)].ident), (yyvsp[(3) - (3)].expr)); ;}
     break;
 
   case 42:
 
 /* Line 1455 of yacc.c  */
 #line 136 "mu.y"
-    { (yyval.expr) = new NMethodCall(*(yyvsp[(1) - (4)].expr), *(yyvsp[(3) - (4)].exprvec)); delete (yyvsp[(3) - (4)].exprvec); ;}
+    { (yyval.expr) = new NMethodCall((yyvsp[(1) - (4)].expr), *(yyvsp[(3) - (4)].exprvec)); ;}
     break;
 
   case 43:
@@ -1988,7 +1988,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 138 "mu.y"
-    { (yyval.expr) = new NListIndex(*(yyvsp[(1) - (4)].expr), *(yyvsp[(3) - (4)].expr)); ;}
+    { (yyval.expr) = new NListIndex((yyvsp[(1) - (4)].expr), (yyvsp[(3) - (4)].expr)); ;}
     break;
 
   case 51:
@@ -2016,21 +2016,21 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 148 "mu.y"
-    { (yyval.expr) = new NBinaryOperator(*(yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].token), *(yyvsp[(3) - (3)].expr)); ;}
+    { (yyval.expr) = new NBinaryOperator((yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].token), (yyvsp[(3) - (3)].expr)); ;}
     break;
 
   case 55:
 
 /* Line 1455 of yacc.c  */
 #line 149 "mu.y"
-    { (yyval.expr) = new NNot(*(yyvsp[(2) - (2)].expr)); ;}
+    { (yyval.expr) = new NNot((yyvsp[(2) - (2)].expr)); ;}
     break;
 
   case 56:
 
 /* Line 1455 of yacc.c  */
 #line 150 "mu.y"
-    { (yyval.expr) = new NNegation(*(yyvsp[(2) - (2)].expr)); ;}
+    { (yyval.expr) = new NNegation((yyvsp[(2) - (2)].expr)); ;}
     break;
 
   case 57:
@@ -2044,7 +2044,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 154 "mu.y"
-    { (yyval.expr) = new NMatch(*(yyvsp[(2) - (4)].expr), *(yyvsp[(4) - (4)].exprvec)); ;}
+    { (yyval.expr) = new NMatch((yyvsp[(2) - (4)].expr), *(yyvsp[(4) - (4)].exprvec)); ;}
     break;
 
   case 59:
@@ -2053,7 +2053,7 @@ yyreduce:
 #line 156 "mu.y"
     { 
                 	(yyval.exprvec) = new ExpressionList(); 
-                	(yyval.exprvec)->push_back(new MatchPattern((yyvsp[(1) - (2)].expr), *(yyvsp[(2) - (2)].block))); 
+                	(yyval.exprvec)->push_back(new MatchPattern((yyvsp[(1) - (2)].expr), (yyvsp[(2) - (2)].block))); 
               ;}
     break;
 
@@ -2063,7 +2063,7 @@ yyreduce:
 #line 160 "mu.y"
     {
                 	(yyval.exprvec) = new ExpressionList(); 
-                	(yyval.exprvec)->push_back(new MatchPattern((yyvsp[(1) - (1)].expr), *(new NNil()))); 
+                	(yyval.exprvec)->push_back(new MatchPattern((yyvsp[(1) - (1)].expr), (new NNil()))); 
               ;}
     break;
 
@@ -2075,15 +2075,15 @@ yyreduce:
                 	// back track to make sure that back isn't NNil
                 	MatchPattern* last = dynamic_cast<MatchPattern*>((yyvsp[(1) - (4)].exprvec)->back());
                 	(yyval.exprvec) = (yyvsp[(1) - (4)].exprvec);
-                	if (dynamic_cast<NNil*>(&(last->block))){
+                	if (dynamic_cast<NNil*>(last->block)){
                 		// push this pattern into last and set block
                 		(yyval.exprvec) = (yyvsp[(1) - (4)].exprvec);
                 		last->patterns.push_back((yyvsp[(3) - (4)].expr));
-                		last->block = *(yyvsp[(4) - (4)].block);
+                		last->block = (yyvsp[(4) - (4)].block);
                 		
                 	}else{
                 		// create a new match pattern
-                		(yyval.exprvec)->push_back(new MatchPattern((yyvsp[(3) - (4)].expr), *(yyvsp[(4) - (4)].block)));
+                		(yyval.exprvec)->push_back(new MatchPattern((yyvsp[(3) - (4)].expr), (yyvsp[(4) - (4)].block)));
                 	}
               ;}
     break;
@@ -2096,14 +2096,14 @@ yyreduce:
                 	// back track to make sure that back isn't NNil
                 	MatchPattern* last = dynamic_cast<MatchPattern*>((yyvsp[(1) - (3)].exprvec)->back());
                 	(yyval.exprvec) = (yyvsp[(1) - (3)].exprvec);
-                	if (dynamic_cast<NNil*>(&(last->block))){
+                	if (dynamic_cast<NNil*>(last->block)){
                 		// push this pattern into last and set block
                 		(yyval.exprvec) = (yyvsp[(1) - (3)].exprvec);
                 		last->patterns.push_back((yyvsp[(3) - (3)].expr));
                 		
                 	}else{
                 		// create a new match pattern
-                		(yyval.exprvec)->push_back(new MatchPattern((yyvsp[(3) - (3)].expr), *(new NNil())));
+                		(yyval.exprvec)->push_back(new MatchPattern((yyvsp[(3) - (3)].expr), (new NNil())));
                 	}
               ;}
     break;
@@ -2140,56 +2140,56 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 202 "mu.y"
-    { (yyval.expr) = new NNot(*(yyvsp[(2) - (2)].ident)); ;}
+    { (yyval.expr) = new NNot((yyvsp[(2) - (2)].ident)); ;}
     break;
 
   case 71:
 
 /* Line 1455 of yacc.c  */
 #line 203 "mu.y"
-    { (yyval.expr) = new NNegation(*(yyvsp[(2) - (2)].expr)); ;}
+    { (yyval.expr) = new NNegation((yyvsp[(2) - (2)].expr)); ;}
     break;
 
   case 72:
 
 /* Line 1455 of yacc.c  */
 #line 204 "mu.y"
-    { (yyval.expr) = new NNegation(*(yyvsp[(2) - (2)].ident)); ;}
+    { (yyval.expr) = new NNegation((yyvsp[(2) - (2)].ident)); ;}
     break;
 
   case 73:
 
 /* Line 1455 of yacc.c  */
 #line 205 "mu.y"
-    { (yyval.expr) = new NBinaryOperator(*(yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].token), *(yyvsp[(3) - (3)].expr)); ;}
+    { (yyval.expr) = new NBinaryOperator((yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].token), (yyvsp[(3) - (3)].expr)); ;}
     break;
 
   case 74:
 
 /* Line 1455 of yacc.c  */
 #line 206 "mu.y"
-    { (yyval.expr) = new NBinaryOperator(*(yyvsp[(1) - (3)].ident), (yyvsp[(2) - (3)].token), *(yyvsp[(3) - (3)].expr)); ;}
+    { (yyval.expr) = new NBinaryOperator((yyvsp[(1) - (3)].ident), (yyvsp[(2) - (3)].token), (yyvsp[(3) - (3)].expr)); ;}
     break;
 
   case 75:
 
 /* Line 1455 of yacc.c  */
 #line 207 "mu.y"
-    { (yyval.expr) = new NBinaryOperator(*(yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].token), *(yyvsp[(3) - (3)].ident)); ;}
+    { (yyval.expr) = new NBinaryOperator((yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].token), (yyvsp[(3) - (3)].ident)); ;}
     break;
 
   case 76:
 
 /* Line 1455 of yacc.c  */
 #line 208 "mu.y"
-    { (yyval.expr) = new NBinaryOperator(*(yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].token), *(yyvsp[(3) - (3)].expr)); ;}
+    { (yyval.expr) = new NBinaryOperator((yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].token), (yyvsp[(3) - (3)].expr)); ;}
     break;
 
   case 77:
 
 /* Line 1455 of yacc.c  */
 #line 209 "mu.y"
-    { (yyval.expr) = new NMethodCall(*(yyvsp[(1) - (4)].ident), *(yyvsp[(3) - (4)].exprvec)); delete (yyvsp[(3) - (4)].exprvec); ;}
+    { (yyval.expr) = new NMethodCall((yyvsp[(1) - (4)].ident), *(yyvsp[(3) - (4)].exprvec)); delete (yyvsp[(3) - (4)].exprvec); ;}
     break;
 
   case 78:
@@ -2203,7 +2203,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 213 "mu.y"
-    { (yyval.expr) = new NListElements(*(yyvsp[(2) - (3)].exprvec)); ;}
+    { (yyval.expr) = new NList(*(yyvsp[(2) - (3)].exprvec)); ;}
     break;
 
   case 80:
@@ -2252,7 +2252,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 228 "mu.y"
-    { (yyval.expr) = new NListElements(*(yyvsp[(2) - (3)].exprvec)); ;}
+    { (yyval.expr) = new NList(*(yyvsp[(2) - (3)].exprvec)); ;}
     break;
 
   case 91:

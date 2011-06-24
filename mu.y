@@ -65,12 +65,12 @@ stmts : stmt { $$ = new NBlock(); $$->statements.push_back($<stmt>1); }
       ;
 
 stmt : var_decl TERMINATE | func_new | while_syn | for_syn | elseend_syn
-     | expr TERMINATE { $$ = new NExpressionStatement(*$1); }
-     | expr TLBRACKET expr TRBRACKET TEQUAL expr TERMINATE { $$ = new NNewIndex(*$1, *$3, *$6); }
+     | expr TERMINATE { $$ = new NExpressionStatement($1); }
+     | expr TLBRACKET expr TRBRACKET TEQUAL expr TERMINATE { $$ = new NNewIndex($1, $3, $6); }
      | TBREAK TERMINATE { $$ = new NBreak(); }
-     | TRETURN TERMINATE { $$ = new NReturn(*(new NNil())); }
-     | TRETURN expr TERMINATE { $$ = new NReturn(*$2); }
-     | TERMINATE { $$ = new NExpressionStatement(*(new NNil())); }
+     | TRETURN TERMINATE { $$ = new NReturn((new NNil())); }
+     | TRETURN expr TERMINATE { $$ = new NReturn($2); }
+     | TERMINATE { $$ = new NExpressionStatement((new NNil())); }
      ;
      
 
@@ -78,17 +78,17 @@ block : TLBRACE stmts TRBRACE { $$ = $2; }
       | TLBRACE TRBRACE { $$ = new NBlock(); }
       ;
 
-var_decl : TVAR ident { $$ = new NVariableDeclaration(*$2); }
-         | TVAR ident TEQUAL expr { $$ = new NVariableDeclaration(*$2, $4); }
+var_decl : TVAR ident { $$ = new NVariableDeclaration($2); }
+         | TVAR ident TEQUAL expr { $$ = new NVariableDeclaration($2, $4); }
          ;
 
 func_decl : TFUNCTION TLPAREN func_decl_args TRPAREN block
-            { $$ = new NFunctionDeclaration(*$3, *$5); delete $3; }
+            { $$ = new NFunctionDeclaration(*$3, $5); delete $3; }
           ;
 
 func_new : TFUNCTION ident TLPAREN func_decl_args TRPAREN block { 
-            	NFunctionDeclaration* dec = new NFunctionDeclaration(*$4, *$6); 
-            	$$ = new NVariableDeclaration(*$2, dec);
+            	NFunctionDeclaration* dec = new NFunctionDeclaration(*$4, $6); 
+            	$$ = new NVariableDeclaration($2, dec);
             	delete $4; 
             }
           ;
@@ -98,25 +98,25 @@ func_decl_args : /*blank*/  { $$ = new ExpressionList(); }
           | func_decl_args TCOMMA ident { $1->push_back($<ident>3); }
           ;
 
-while_syn : TWHILE expr block { $$ = new NWhileLoop(*$2, *$3); };
+while_syn : TWHILE expr block { $$ = new NWhileLoop($2, $3); };
 
-for_syn_decl : ident TIN expr { $$ = new InCounter(*$1, *$3); }
-             | expr TCOMMA expr TCOMMA expr { $$ = new LoopCounter(*$1, *$3, *$5); }
-             | var_decl TCOMMA expr TCOMMA expr { $$ = new VarLoopCounter(*$1, *$3, *$5); }
+for_syn_decl : ident TIN expr { $$ = new InCounter($1, $3); }
+             | expr TCOMMA expr TCOMMA expr { $$ = new LoopCounter($1, $3, $5); }
+             | var_decl TCOMMA expr TCOMMA expr { $$ = new VarLoopCounter($1, $3, $5); }
              | TLPAREN for_syn_decl TRPAREN { $$ = $2; }
              ;
 
-for_syn : TFOR for_syn_decl block { $$ = new NForLoop(*$2, *$3); };
+for_syn : TFOR for_syn_decl block { $$ = new NForLoop($2, $3); };
 
-if_syn : TIF expr block { $$ = new NIf(*$2, *$3, *(new NBlock())); }
+if_syn : TIF expr block { $$ = new NIf($2, $3, (new NBlock())); }
        ;
 
 elseif_syn : if_syn { $$ = $1; }
-           | elseif_syn TELSEIF expr block { $$ = $1; (dynamic_cast<NIf*> ($$))->else_if(*$3, *$4); }
+           | elseif_syn TELSEIF expr block { $$ = $1; (dynamic_cast<NIf*> ($$))->else_if($3, $4); }
            ;
 
 elseend_syn : elseif_syn { $$ = $1; }
-            | elseif_syn TELSE block { $$ = $1; (dynamic_cast<NIf*> ($$))->else_end(*$3); }
+            | elseif_syn TELSE block { $$ = $1; (dynamic_cast<NIf*> ($$))->else_end($3); }
             ;
 
 ident : TIDENTIFIER { $$ = new NIdentifier(*$1); delete $1; }
@@ -129,13 +129,13 @@ numeric : TINTEGER { $$ = new NNumber(atof($1->c_str())); delete $1; }
 string : TSTRING_LITERAL { $$ = new NString(*$1); }
        ;
 
-inline_cond : expr TQUESTION expr TCOLON expr { $$ = new NInlineCond(*$1, *$3, *$5); }
+inline_cond : expr TQUESTION expr TCOLON expr { $$ = new NInlineCond($1, $3, $5); }
             ;
 
-expr : ident TEQUAL expr { $$ = new NAssignment(*$<ident>1, *$3); }
-     | expr TLPAREN call_args TRPAREN { $$ = new NMethodCall(*$1, *$3); delete $3; }
+expr : ident TEQUAL expr { $$ = new NAssignment($<ident>1, $3); }
+     | expr TLPAREN call_args TRPAREN { $$ = new NMethodCall($1, *$3); }
      | ident { $<ident>$ = $1; }
-     | expr TLBRACKET expr TRBRACKET { $$ = new NListIndex(*$1, *$3); }
+     | expr TLBRACKET expr TRBRACKET { $$ = new NListIndex($1, $3); }
      | numeric
      | string
      | list_decl
@@ -145,49 +145,49 @@ expr : ident TEQUAL expr { $$ = new NAssignment(*$<ident>1, *$3); }
      | TTRUE { $$ = new NBoolean(true); }
      | TFALSE { $$ = new NBoolean(false); }
      | TNIL { $$ = new NNil(); }
-     | expr comparison expr { $$ = new NBinaryOperator(*$1, $2, *$3); }
-     | TUNOT expr { $$ = new NNot(*$2); }
-     | TMINUS expr { $$ = new NNegation(*$2); }
+     | expr comparison expr { $$ = new NBinaryOperator($1, $2, $3); }
+     | TUNOT expr { $$ = new NNot($2); }
+     | TMINUS expr { $$ = new NNegation($2); }
      | TLPAREN expr TRPAREN { $$ = $2; }
      ;
 
-match : TMATCH expr TWITH match_pattern { $$ = new NMatch(*$2, *$4); };
+match : TMATCH expr TWITH match_pattern { $$ = new NMatch($2, *$4); };
 
 match_pattern : m_pattern block { 
                 	$$ = new ExpressionList(); 
-                	$$->push_back(new MatchPattern($1, *$2)); 
+                	$$->push_back(new MatchPattern($1, $2)); 
               }
               | m_pattern {
                 	$$ = new ExpressionList(); 
-                	$$->push_back(new MatchPattern($1, *(new NNil()))); 
+                	$$->push_back(new MatchPattern($1, (new NNil()))); 
               }
               | match_pattern TBITOR m_pattern block {
                 	// back track to make sure that back isn't NNil
                 	MatchPattern* last = dynamic_cast<MatchPattern*>($1->back());
                 	$$ = $1;
-                	if (dynamic_cast<NNil*>(&(last->block))){
+                	if (dynamic_cast<NNil*>(last->block)){
                 		// push this pattern into last and set block
                 		$$ = $1;
                 		last->patterns.push_back($3);
-                		last->block = *$4;
+                		last->block = $4;
                 		
                 	}else{
                 		// create a new match pattern
-                		$$->push_back(new MatchPattern($3, *$4));
+                		$$->push_back(new MatchPattern($3, $4));
                 	}
               }
               | match_pattern TBITOR m_pattern {
                 	// back track to make sure that back isn't NNil
                 	MatchPattern* last = dynamic_cast<MatchPattern*>($1->back());
                 	$$ = $1;
-                	if (dynamic_cast<NNil*>(&(last->block))){
+                	if (dynamic_cast<NNil*>(last->block)){
                 		// push this pattern into last and set block
                 		$$ = $1;
                 		last->patterns.push_back($3);
                 		
                 	}else{
                 		// create a new match pattern
-                		$$->push_back(new MatchPattern($3, *(new NNil())));
+                		$$->push_back(new MatchPattern($3, (new NNil())));
                 	}
               }
               ;
@@ -199,18 +199,18 @@ m_pattern : ident { $<ident>$ = $1; }
           | TNIL { $$ = new NNil(); }
           | TTRUE { $$ = new NBoolean(true); }
           | TFALSE { $$ = new NBoolean(false); }
-          | TUNOT ident { $$ = new NNot(*$2); }
-          | TMINUS numeric { $$ = new NNegation(*$2); }
-          | TMINUS ident { $$ = new NNegation(*$2); }
-          | m_pattern TPREPEND m_pattern { $$ = new NBinaryOperator(*$1, $2, *$3); }
-          | ident pattern_cmp numeric { $$ = new NBinaryOperator(*$1, $2, *$3); }
-          | numeric pattern_cmp ident { $$ = new NBinaryOperator(*$1, $2, *$3); }
-          | numeric comparison numeric { $$ = new NBinaryOperator(*$1, $2, *$3); }
-          | ident TLPAREN call_args TRPAREN { $$ = new NMethodCall(*$1, *$3); delete $3; }
+          | TUNOT ident { $$ = new NNot($2); }
+          | TMINUS numeric { $$ = new NNegation($2); }
+          | TMINUS ident { $$ = new NNegation($2); }
+          | m_pattern TPREPEND m_pattern { $$ = new NBinaryOperator($1, $2, $3); }
+          | ident pattern_cmp numeric { $$ = new NBinaryOperator($1, $2, $3); }
+          | numeric pattern_cmp ident { $$ = new NBinaryOperator($1, $2, $3); }
+          | numeric comparison numeric { $$ = new NBinaryOperator($1, $2, $3); }
+          | ident TLPAREN call_args TRPAREN { $$ = new NMethodCall($1, *$3); delete $3; }
           | TLPAREN m_pattern TRPAREN { $$ = $2; }
           ;
 
-list_pdecl : TLBRACKET list_pel TRBRACKET { $$ = new NListElements(*$2); }
+list_pdecl : TLBRACKET list_pel TRBRACKET { $$ = new NList(*$2); }
            ;
 
 list_pel : /*blank*/ { $$ = new ExpressionList(); }
@@ -225,7 +225,7 @@ call_args : /*blank*/  { $$ = new ExpressionList(); }
           | call_args TCOMMA expr  { $1->push_back($3); }
           ;
           
-list_decl : TLBRACKET list_el TRBRACKET { $$ = new NListElements(*$2); }
+list_decl : TLBRACKET list_el TRBRACKET { $$ = new NList(*$2); }
           ;
 
 list_el : /*blank*/ { $$ = new ExpressionList(); }
