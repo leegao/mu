@@ -72,7 +72,7 @@
 
     #include "node.h"
     #include <cstdio>
-    NBlock *programBlock; /* the top level root node of our final AST */
+    NBlock *programBlock = new NBlock(); /* the top level root node of our final AST */
 
     extern int yylex();
     void yyerror(const char *s) { printf("ERROR: %s\n", s); }
@@ -1561,7 +1561,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 60 "mu.y"
-    { programBlock = new NBlock(); programBlock->statements.push_back((yyvsp[(1) - (1)].stmt)); return 0; ;}
+    { programBlock->statements.push_back((yyvsp[(1) - (1)].stmt)); return 0; ;}
     break;
 
   case 3:

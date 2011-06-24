@@ -1,7 +1,7 @@
 %{
     #include "node.h"
     #include <cstdio>
-    NBlock *programBlock; /* the top level root node of our final AST */
+    NBlock *programBlock = new NBlock(); /* the top level root node of our final AST */
 
     extern int yylex();
     void yyerror(const char *s) { printf("ERROR: %s\n", s); }
@@ -57,7 +57,7 @@
 
 %%
 
-program : stmt { programBlock = new NBlock(); programBlock->statements.push_back($1); return 0; }
+program : stmt { programBlock->statements.push_back($1); return 0; }
         ;
 
 stmts : stmt { $$ = new NBlock(); $$->statements.push_back($<stmt>1); }
