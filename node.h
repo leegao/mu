@@ -177,8 +177,7 @@ public:
 class NIf : public NStatement {
 public:
 	NExpression& cond;
-	NBlock& block;
-	NStatement& else_;
-	NIf(NExpression& cond, NBlock& block, NStatement& else_) :
+	NBlock& block, else_;
+	NIf(NExpression& cond, NBlock& block, NBlock& else_) :
 		cond(cond), block(block), else_(else_) {}
 };

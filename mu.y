@@ -57,11 +57,11 @@
 
 %%
 
-program : stmts { programBlock = $1; return 0; }
+program : stmt { programBlock = new NBlock(); programBlock->statements.push_back($1); return 0; }
         ;
 
 stmts : stmt { $$ = new NBlock(); $$->statements.push_back($<stmt>1); }
-      /*| stmts stmt { $1->statements.push_back($<stmt>2); }*/
+      | stmts stmt { $1->statements.push_back($<stmt>2); }
       ;
 
 stmt : var_decl TERMINATE | func_decl | while_syn | for_syn | if_syn
@@ -96,9 +96,10 @@ for_syn_decl : ident TIN expr { $$ = new InCounter(*$1, *$3); }
 
 for_syn : TFOR for_syn_decl block { $$ = new NForLoop(*$2, *$3); };
 
-if_syn : TIF expr block { $$ = new NIf(*$2, *$3, *(new NExpressionStatement(*(new NDoNothing())))); }
-       
+if_syn : TIF expr block { $$ = new NIf(*$2, *$3, *(new NBlock())); }
        ;
+
+
 
 ident : TIDENTIFIER { $$ = new NIdentifier(*$1); delete $1; }
       ;
