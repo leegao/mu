@@ -56,9 +56,9 @@ string NMatch::toString(){
 	string match = "match " + expr->toString() + " with\n";
 	ExpressionList::iterator pattern;
 	for (pattern = patterns.begin(); pattern < patterns.end(); pattern++){
-		match += (*pattern)->toString() + "\n";
+		match += (*pattern)->toString();
 	}
-	return match + "\n";
+	return match;
 }
 
 string MatchPattern::toString(){
