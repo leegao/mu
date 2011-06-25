@@ -302,6 +302,7 @@ public:
 	std::string name(){
 		return "NWhileLoop";
 	}
+	std::string toString();
 };
 
 class ForCounter{};

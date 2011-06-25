@@ -228,5 +228,10 @@ string NFunctionDeclaration::toString(){
 	for (arg = arguments.begin(); arg < arguments.end(); arg++){
 		ret += (arg == arguments.begin() ? "" : ", ") + (*arg)->toString();
 	}
-	return ret+")"+block->toString();
+	return ret+") "+block->toString();
+}
+
+string NWhileLoop::toString(){
+	std::string ret = "while ";
+	return ret+cond->toString()+ " " + block->toString();
 }
