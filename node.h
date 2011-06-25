@@ -359,4 +359,5 @@ public:
 	std::string name(){
 		return "NIf";
 	}
+	std::string toString();
 };

@@ -248,3 +248,10 @@ string NForLoop::toString(){
 	}
 	return ret + " " + block->toString();
 }
+
+string NIf::toString(){
+	std::string ret = "if ";
+	ret += cond->toString() + " " + block->toString();
+	ret += else_->statements.size() ? (" else " + else_->toString()) : "";
+	return ret;
+}
