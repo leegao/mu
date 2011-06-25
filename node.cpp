@@ -221,3 +221,12 @@ string NVariableDeclaration::toString(){
 	std::string ret = "var ";
 	return ret + id->toString() + " = " + assignmentExpr->toString() + ";";
 }
+
+string NFunctionDeclaration::toString(){
+	std::string ret = "function(";
+	ExpressionList::iterator arg;
+	for (arg = arguments.begin(); arg < arguments.end(); arg++){
+		ret += (arg == arguments.begin() ? "" : ", ") + (*arg)->toString();
+	}
+	return ret+")"+block->toString();
+}

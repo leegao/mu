@@ -290,6 +290,7 @@ public:
 	std::string name(){
 		return "NFunctionDeclaration";
 	}
+	std::string toString();
 };
 
 class NWhileLoop : public NStatement {
