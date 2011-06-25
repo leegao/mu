@@ -235,3 +235,16 @@ string NWhileLoop::toString(){
 	std::string ret = "while ";
 	return ret+cond->toString()+ " " + block->toString();
 }
+
+string NForLoop::toString(){
+	std::string ret = "for ";
+	if (dynamic_cast<InCounter*>(counter)){
+		// for x in iterable
+		InCounter* c = dynamic_cast<InCounter*>(counter);
+		ret += c->variable->toString() + " in " + c->iterable->toString();
+	}else if (dynamic_cast<LoopCounter*>(counter)) {
+		LoopCounter* c = dynamic_cast<LoopCounter*>(counter);
+		ret += "("+c->pre->toString() + ", " + c->cond->toString() + ", " + c->counter->toString() + ") ";
+	}
+	return ret + " " + block->toString();
+}

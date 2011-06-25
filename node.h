@@ -305,7 +305,11 @@ public:
 	std::string toString();
 };
 
-class ForCounter{};
+class ForCounter{
+public:
+	virtual ~ForCounter(){}
+};
+
 class InCounter : public ForCounter{
 public:
 	NIdentifier* variable;
@@ -323,14 +327,14 @@ public:
 			pre(pre), cond(cond), counter(counter) {}
 };
 
-class VarLoopCounter : public ForCounter{
-public:
-	NStatement* pre;
-	NExpression* cond, *counter;
-	VarLoopCounter(NStatement* pre,
-		NExpression* cond, NExpression* counter) :
-			pre(pre), cond(cond), counter(counter) {}
-};
+//class VarLoopCounter : public ForCounter{
+//public:
+//	NStatement* pre;
+//	NExpression* cond, *counter;
+//	VarLoopCounter(NStatement* pre,
+//		NExpression* cond, NExpression* counter) :
+//			pre(pre), cond(cond), counter(counter) {}
+//};
 
 class NForLoop : public NStatement {
 public:
@@ -341,6 +345,7 @@ public:
 	std::string name(){
 		return "NForLoop";
 	}
+	std::string toString();
 };
 
 class NIf : public NStatement {

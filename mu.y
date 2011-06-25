@@ -102,7 +102,7 @@ while_syn : TWHILE expr block { $$ = new NWhileLoop($2, $3); };
 
 for_syn_decl : ident TIN expr { $$ = new InCounter($1, $3); }
              | expr TCOMMA expr TCOMMA expr { $$ = new LoopCounter($1, $3, $5); }
-             | var_decl TCOMMA expr TCOMMA expr { $$ = new VarLoopCounter($1, $3, $5); }
+             /*| var_decl TCOMMA expr TCOMMA expr { $$ = new VarLoopCounter($1, $3, $5); }*/
              | TLPAREN for_syn_decl TRPAREN { $$ = $2; }
              ;
 
