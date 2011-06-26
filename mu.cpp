@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include "node.h"
+#include "type.h"
 
 extern NBlock* programBlock;
 extern int yyparse();

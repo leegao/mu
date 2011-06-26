@@ -8,7 +8,12 @@
 #ifndef TYPE_H_
 #define TYPE_H_
 
-#include "hashmap.h"
+#include <vector>
+#include <deque>
+#include <map>
+#include <list>
+
+using namespace std;
 
 #define TNIL 0
 #define TNUM 1
@@ -20,55 +25,79 @@
 // internal type
 #define TBLOCK 6
 
-typedef struct mu_type{
-	char tid;
-	union {
-		char b;
-		short s;
-		int i;
-		float number;
-		char* str;
-		struct {
-			struct mu_type* lst;
-			int size;
-		} list;
-		struct {
-			void* code;
-			void* parent;
-			int nargs;
-			char** args;
-		} fun;
-		struct {
-			void* parent;
-			map_t upvalues;
-			char** variables;
-			struct mu_type* constants;
-			map_t locals;
-			char* code;
-		} code;
-		void* ptr;
-	} data;
-} mu_type;
 
-typedef struct mu_list {
-	mu_type* list;
-	int size;
-} mu_list;
+class MuType{
+public:
+	static const char tid = 0;
+};
 
-typedef struct block{
-	struct block* parent;
-	map_t upvalues;
-	char** variables;
-	mu_type* constants;
-	map_t locals;
+class TNil : MuType{
+public:
+	static const char tid = TNIL;
+};
+
+class TNumber : MuType{
+public:
+	static const char tid = TNUM;
+	float value;
+	TNumber(float value) :
+		value(value) {}
+};
+
+class TBool : MuType{
+public:
+	static const char tid = TBOOL;
+	bool value;
+	TBool(bool value) :
+		value(value) {}
+};
+
+class TString : MuType{
+public:
+	static const char tid = TSTR;
+	string value;
+	TString(string value) :
+		value(value) {}
+};
+
+class TList : MuType{
+public:
+	static const char tid = TLIST;
+	deque<MuType*> list;
+	TList(deque<MuType*>  list) :
+		list(list) {}
+	void prepend(MuType* obj){
+		list.push_front(obj);
+	}
+	void append(MuType* obj){
+		list.push_back(obj);
+	}
+	MuType* at(size_t index){
+		return list.at(index);
+	}
+	void assign(size_t index, MuType* obj){
+		list.assign(index, obj);
+	}
+};
+
+class TBlock : MuType{
+public:
+	static const char tid = TBLOCK;
+	map<string, MuType*> locals, &upvalues;
 	char* code;
-} block;
+	TBlock(map<string, MuType*> &upvalues,
+		map<string, MuType*> locals,
+		char* code) :
+			upvalues(upvalues), locals(locals), code(code) {}
+};
 
-typedef struct mu_func {
-	block* code;
-	block* parent;
-	int nargs;
-	char** args;
-} mu_func;
+class TFunc : MuType{
+public:
+	static const char tid = TFUN;
+	TBlock code;
+	list<string> args;
+	TFunc(TBlock code, list<string> args) :
+		code(code), args(args) {}
+};
 
 #endif /* TYPE_H_ */
