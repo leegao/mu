@@ -546,16 +546,20 @@ char *yytext;
 #include "parser.hpp"
 #define SAVE_TOKEN yylval.string = new std::string(yytext, yyleng)
 #define TOKEN(t) (yylval.token = t)
-extern "C" int yywrap() { }
+extern "C" int yywrap() {return 0; }
 #line 551 "tokens.cpp"
 
 #define INITIAL 0
 
-#ifndef YY_NO_UNISTD_H
+
+
+#if _WIN32 || _WIN64
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
  * down here because we want the user's section 1 to have been scanned first.
  * The user has a chance to override it with an option.
  */
+#include "unistd_dropin.h"
+#else if !YY_NO_UNISTD_H
 #include <unistd.h>
 #endif
 
@@ -1698,7 +1702,7 @@ extern int isatty (int );
         b->yy_bs_column = 0;
     }
 
-        b->yy_is_interactive = file ? (isatty( fileno(file) ) > 0) : 0;
+        b->yy_is_interactive = file ? (_isatty( _fileno(file) ) > 0) : 0;
     
 	errno = oerrno;
 }
